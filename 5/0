@@ -1,0 +1,52 @@
+.intel_syntax noprefix
+.text
+.global very_important_function, main
+
+very_important_function:
+sub	rsp, 8
+push	r12
+push	r13
+push	r14
+push	r15
+
+mov	rcx, rdi
+mov	r15, 0
+
+loopBegin:
+mov	r13, rcx
+
+
+mov	rdi, offset input
+mov	rsi, rsp
+call	scanf	
+
+movsxd	rsi, [rsp]
+mov	r14, A
+movsxd	r14, [r14+4*r15]
+imul	rsi, r14 
+
+mov	rdi, offset output
+call	printf
+
+add	r15, 1
+mov	rcx, r13	
+loop loopBegin
+
+
+mov	rax, 0
+pop	r15
+pop	r14
+pop	r13
+pop	r12
+add	rsp, 8
+
+ret
+
+
+.section .rodata
+
+input:
+	.string "%d"
+
+output:
+	.string "%lld\n"

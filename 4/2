@@ -1,0 +1,26 @@
+.text
+.global main
+
+main:
+
+sub	sp, sp, #8
+str	x30, [sp]
+
+loopBegin:
+bl getchar_unlocked
+cmp	w0, #-1
+beq loopEnd
+
+cmp	w0, #58
+bge loopBegin 
+
+cmp	w0, #47 
+ble loopBegin
+
+bl putchar_unlocked
+bl loopBegin
+
+loopEnd:
+ldr	x30, [sp]
+add	sp, sp, #8
+ret

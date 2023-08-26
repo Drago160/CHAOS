@@ -1,0 +1,39 @@
+.intel_syntax noprefix
+.global very_important_function
+.text
+
+very_important_function:
+
+xor rax, rax
+vxorps ymm0, ymm0, ymm0
+vxorps ymm1, ymm1, ymm1
+vxorps ymm2, ymm2, ymm2
+.Lwhile:
+
+cmp rdi, rax
+je .Lexit
+
+vmovaps ymm0, [rsi + 4 * rax]
+vmovaps ymm1, [rdx + 4 * rax]
+
+vaddps ymm0, ymm1, ymm1
+vmovaps [rcx + 4 * rax], ymm0
+
+vaddps ymm2, ymm0, ymm2
+
+add rax, 8
+jmp .Lwhile
+
+.Lexit:
+
+    vhaddps ymm2, ymm2, ymm2
+    vhaddps ymm2, ymm2, ymm2
+    vextractf128 xmm1, ymm2, 1
+    addss xmm1, xmm2
+    cvtss2sd xmm2, xmm1
+    cvtsi2sd xmm1, rdi
+    divsd xmm2, xmm1
+
+    movapd xmm0, xmm2
+
+ret

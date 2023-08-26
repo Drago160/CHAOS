@@ -1,0 +1,43 @@
+.intel_syntax noprefix
+.global avx_sin
+.text
+
+avx_sin:
+// ymm0 - answer
+vxorpd ymm1, ymm1, ymm1
+vxorpd ymm2, ymm2, ymm2 // pivot
+vxorpd ymm4, ymm4, ymm4 // denum
+vxorpd ymm5, ymm5, ymm5 // x
+vxorpd ymm6, ymm6, ymm6 // 1
+vxorpd ymm7, ymm7, ymm7 // 0
+
+vmovapd ymm5, ymm0
+vmovapd ymm2, ymm0
+
+vxorpd ymm0, ymm0, ymm0
+
+mov rdi, 1
+cvtsi2sd xmm6, rdi
+cvtsi2sd xmm4, rdi
+loopBegin:
+
+vaddpd ymm0, ymm0, ymm2 // ans += pivot
+
+vmulpd ymm2, ymm2, ymm5 // pivot *= x
+vaddpd ymm4, ymm4, ymm6 // denum += 1
+vdivpd ymm2, ymm2, ymm4 // pivot /= denum
+
+vmulpd ymm2, ymm2, ymm5 // pivot *= x
+vaddpd ymm4, ymm4, ymm6 // denum += 1
+vdivpd ymm2, ymm2, ymm4 // pivot /= denum
+
+vsubpd ymm2, ymm7, ymm2 // *= -1
+
+vcomisd xmm2, xmm7 // pivot == 0
+je loopEnd
+
+jmp loopBegin
+
+loopEnd:
+
+ret

@@ -1,0 +1,28 @@
+.text
+.global main
+
+main:
+sub	sp, sp, #16
+str	x30, [sp]
+ldr	x0, =input_str
+
+mov	x1, sp
+add	x1, x1, #8
+mov	x2, sp
+add	x2, x2, #12
+
+bl scanf
+ldr	w1, [sp, #8]
+ldr	w2, [sp, #12]
+add	w1, w1, w2
+ldr	x0, =output_str 
+
+bl printf
+ldr	x30, [sp]
+add	sp, sp, #16
+ret
+
+output_str:
+.asciz	"%d"
+input_str:
+.asciz	"%d %d"
