@@ -1,0 +1,16 @@
+.text
+.global sum
+
+sum:
+mov	x5, 0
+loopBegin:
+ldr	x4,[x2]
+add	x2, x2, 4
+add	x5, x5, 1
+add	x0, x4, x0
+cmp	x5, x1 
+bge loopEnd
+b loopBegin
+loopEnd:
+ret
+
